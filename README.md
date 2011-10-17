@@ -1,3 +1,5 @@
+![chess-charm](https://github.com/rook2pawn/node-chess-charm/raw/master/screen.png)
+
 chess-charm
 ===========
 
