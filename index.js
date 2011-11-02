@@ -1,4 +1,5 @@
 var charm = require('charm')(process);
+var EE = require('events').EventEmitter;
 var chessCharm = function(obj) {
     charm.on('^C',function() {
         charm.foreground('green');
@@ -7,13 +8,17 @@ var chessCharm = function(obj) {
     });
     charm.reset();
     charm.cursor(false);
+    var blackPosName =  0;
+    var whitePosName = 8;
     var board = undefined;
     var blackname = whitename = undefined;
+    var keyPresses = new EE;
     process.stdin.resume();
     process.stdin.on('keypress', function(char, key) {
+        keyPresses.emit('keypress',char,key);
         if (key !== undefined) {
             switch (key.name) {
-                case 'left': 
+/*                case 'left': 
                                 charm.left(1);
                                 break;
                 case 'right': 
@@ -23,7 +28,7 @@ var chessCharm = function(obj) {
                                 charm.up(1);
                                 break;
                 case 'down':    charm.down(1);
-                                break;
+                                break; */
                 case 'c': 
                                 charm.position(function(x,y) {
                                     cycleColors();
@@ -192,19 +197,29 @@ var chessCharm = function(obj) {
         board = newboard;
         return self;
     };
+    self.showNames = function() {
+        charm.background('black').foreground('white');
+        charm.position(12,blackPosName);
+        charm.write(blackname + " (B)");
+        charm.background('black').foreground('white');
+        charm.position(12,whitePosName);
+        charm.write(whitename + " (W)");
+    };
     self.setBlackName = function(name) {
         blackname = name;
-        charm.background('black').foreground('white');
-        charm.position(12,0);
-        charm.write(blackname + " (B)");
         return self;
     };
     self.setWhiteName = function(name) {
         whitename = name;
-        charm.background('black').foreground('white');
-        charm.position(12,8);
-        charm.write(whitename + " (W)");
         return self;
+    };
+    self.switchNamePositions = function() {
+        whitePosName = 0
+        blackPosName = 8;
+        return self;
+    };
+    self.getKeyPressEmitter = function() {
+        return keyPresses;
     };
     self.done = function() {
         charm.foreground('green');
@@ -216,6 +231,14 @@ var chessCharm = function(obj) {
     };
     self.getBlackName = function() {
         return blackname;
+    };
+    self.write = function(msg) {
+        charm.write(msg);  
+    };
+    self.writeReset = function() {
+        charm.position(12,4);
+        charm.write("               ");
+        charm.position(12,4);
     };
     self.move = function(msanMove) {
         var obj = updateBoardMSAN(board,msanMove);
@@ -232,6 +255,7 @@ var chessCharm = function(obj) {
         }
         return self;
     };
+    charm.position(12,6);
     return self;
 };
 module.exports = exports = chessCharm;
