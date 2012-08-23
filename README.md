@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/rook2pawn/node-chess-charm.png)](http://travis-ci.org/rook2pawn/node-chess-charm)
 ![chess-charm](https://github.com/rook2pawn/node-chess-charm/raw/master/screen.png)
 
 chess-charm
