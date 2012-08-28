@@ -7,8 +7,10 @@ chess-charm
 
     var board = chessCharm()
         .showBoard()
-        .setBlackName('jamal')
-        .setWhiteName('Johannes');
+        .setOpponent({name:'jamal',color:'black'})
+        .setWhiteName({name:'Johannes',color:'white'})
+        .showOpponent()
+        .showPlayer();
         
         board
             .move('e2e4')
@@ -17,11 +19,24 @@ chess-charm
             .move('d7d6')
             .move('f1b5')
             .move('b8c6')
-            .move('e1g1')
-            .showBoard();
+            .move('e1g1');
 
 
 Draw chess positions, make moves, and see a chess board in beautiful ansi + unicode chess fonts!
+
+Interactive!
+============
+
+Select with space bar
+---------------------
+Select a piece with the arrow keys, and move the arrow keys to the piece's desired location, 
+
+Move with the "m" key
+---------------------
+After you have a piece selected, then press m!
+
+View this example in ./test.js
+
 
 Methods
 =======
@@ -30,28 +45,17 @@ Methods
 -----------------
 Updates the board with the move (given in Modified Standard Algebraic Notation)
 
-.updateBoard(board) 
--------------------
-Updates the board completely with the supplied board.
-
 .showBoard()
 ------------
 Shows the board as it currently stands.
 
-.setBlackName(name)
+.setPlayer({name:"foo",color:"black"})
 -------------------
-Sets the black player's name.
+Sets your player.
 
-.setWhiteName(name)
+.setOpponent({name:'bar',color:'white'})
 -------------------
-Sets the white player's name.
-
-
-
-Cycle colors
-============
-
-Push "c"
+Sets the opponent.
 
 Exit 
 ====

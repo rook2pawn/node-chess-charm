@@ -100,6 +100,7 @@ var chessCharm = function() {
         } else {
             charm.write(' (W)');
         }
+        return self;
     };
     self.showPlayer = function() {
         setColors();
@@ -113,7 +114,7 @@ var chessCharm = function() {
         } else {
             charm.write(' (W)');
         }
-        charm.position(6,8);
+        return self;
     };
     self.setPlayer = function(you) {
         player = you;
@@ -164,15 +165,19 @@ var chessCharm = function() {
                 bx = 7 - bx;
                 by = 7 - by;
             }
+/*
             var id = self.identifySquare({col:bx,row:by});
             charm.write("id:" + id);
             var piece = chess.getPiece(board,{row:by, col:bx});
             charm.write(" " + piece);
+*/
             charm.position(offset+10,offset+5);
             charm.write("x:" + bx + " y:" + by);
+/*
             var letter = String.fromCharCode(bx+97);
             var number = by + 1;
             charm.write("-> " + letter + "" + number);
+*/
             charm.position(x-1,y);
         });
     };
