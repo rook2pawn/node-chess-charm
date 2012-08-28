@@ -23,8 +23,11 @@ process.stdin.on('keypress', function(ch,key) {
                 game.setBoundaries();
             break;
         case 'space' :
-                game.reportStatus();
+                //game.reportStatus();
+                game.select();
             break;
+        case 'm' : 
+                game.moveSelect();
         default: 
                 game.showBoard();
             break;

@@ -17,6 +17,7 @@ var chessCharm = function() {
     var perspective = "white";
     var board = undefined;
     var offset = 3;
+    var selected = {};
     var self = {};
     self.showBoard = function(params) {
         setColors(); 
@@ -175,9 +176,75 @@ var chessCharm = function() {
             charm.position(x-1,y);
         });
     };
+    self.moveSelect = function() {
+        setColors();
+        charm.position(function(x,y) {
+            self.showBoard({perspective:perspective});
+            
+            setColors();
+            var bx = x - offset - 2;//column 
+            var by = 7 + offset - y; // row
+            if (perspective == 'black') {
+                bx = 7 - bx;
+                by = 7 - by;
+            }
+            var color = self.identifySquare({col:bx,row:by});
+            var letter = String.fromCharCode(bx+97);
+            var piece = chess.getPiece(board,{row:by, col:bx});
+            var number = by + 1;
+            charm.position(offset + 10 ,offset + 5);
+            if (selected.piece !== undefined) {
+                charm.write("Move to: " + letter.concat(number));
+            } else {
+                selected = {};
+                charm.erase('end'); 
+            }
+            charm.position(x-1,y);
+        });
+    };
+    self.select = function() {
+        setColors();
+        charm.position(function(x,y) {
+            self.showBoard({perspective:perspective});
+            
+            setColors();
+            var bx = x - offset - 2;//column 
+            var by = 7 + offset - y; // row
+            if (perspective == 'black') {
+                bx = 7 - bx;
+                by = 7 - by;
+            }
+            var color = self.identifySquare({col:bx,row:by});
+            var letter = String.fromCharCode(bx+97);
+            var piece = chess.getPiece(board,{row:by, col:bx});
+            var number = by + 1;
+            charm.position(offset + 10 ,offset + 4);
+            if ((color !== ' ') && (piece !== '1')) {
+                selected.piece = piece;
+                selected.pos = {row:by, col:bx};
+                selected.msanpos = letter.concat(number);
+                charm.write("Selected: " + piece + "("+color.charAt(0)+")" + letter + number);
+            } else {
+                selected = {};
+                charm.erase('end'); 
+                charm.position(offset + 10 ,offset + 5);
+                charm.erase('end'); 
+            }
+/*
+else if (selected.piece !== '1') {
+                charm.position(offset+10, offset+5);
+                var movestring = selected.msanpos;
+                movestring = movestring.concat(letter.concat(number));
+                charm.write("Move: " + movestring);
+                self.move(movestring);
+            }
+*/
+            charm.position(x-1,y);
+        });
+    };
     self.identifySquare = function(pos) {
         var piece = board[pos.row][pos.col];
-        var piececolor = "blank";
+        var piececolor = " ";
         if (piece != '1') {
             if (piece == piece.toUpperCase()) {
                 piececolor = 'white';
