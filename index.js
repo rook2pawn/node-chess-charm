@@ -195,6 +195,9 @@ var chessCharm = function() {
             charm.position(offset + 10 ,offset + 5);
             if (selected.piece !== undefined) {
                 charm.write("Move to: " + letter.concat(number));
+                var movestring = selected.msanpos;
+                movestring = movestring.concat(letter.concat(number));
+                self.move(movestring);
             } else {
                 selected = {};
                 charm.erase('end'); 
@@ -230,15 +233,6 @@ var chessCharm = function() {
                 charm.position(offset + 10 ,offset + 5);
                 charm.erase('end'); 
             }
-/*
-else if (selected.piece !== '1') {
-                charm.position(offset+10, offset+5);
-                var movestring = selected.msanpos;
-                movestring = movestring.concat(letter.concat(number));
-                charm.write("Move: " + movestring);
-                self.move(movestring);
-            }
-*/
             charm.position(x-1,y);
         });
     };
