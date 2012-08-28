@@ -136,8 +136,6 @@ var chessCharm = function() {
     };
     self.setBoundaries = function() {
         charm.position(function(x,y) {
-            charm.position(16,16).write("x:" + x + "y:" + y + "<");
-            charm.position(x,y);
             if (x > offset + 8) {
                 charm.position(offset+8,y);
             } 
@@ -156,24 +154,29 @@ var chessCharm = function() {
         setColors();
         charm.position(function(x,y) {
             self.showBoard({perspective:perspective});
-            charm.position(11,5);
-            var bx = x - 2 - offset;//column 
-            var by = 8 - y + 2; // row
+            
+            setColors();
+            charm.position(offset + 10 ,offset + 4);
+            var bx = x - offset - 2;//column 
+            var by = 7 + offset - y; // row
             if (perspective == 'black') {
-                bx = 8 - x + 2;
-                by = y -1 ;
+                bx = 7 - bx;
+                by = 7 - by;
             }
-            charm.write(String.fromCharCode(bx+97) + by);
-            charm.write(":" + bx + "," + by);
-            var id = self.identifySquare({x:bx,y:by-1,perspective:perspective});
+            var id = self.identifySquare({col:bx,row:by});
             charm.write("id:" + id);
-            var piece = chess.getPiece(board,{row:by, col:bx}, perspective);
+            var piece = chess.getPiece(board,{row:by, col:bx});
             charm.write(" " + piece);
+            charm.position(offset+10,offset+5);
+            charm.write("x:" + bx + " y:" + by);
+            var letter = String.fromCharCode(bx+97);
+            var number = by + 1;
+            charm.write("-> " + letter + "" + number);
             charm.position(x-1,y);
         });
     };
     self.identifySquare = function(pos) {
-        var piece = board[pos.y][pos.x];
+        var piece = board[pos.row][pos.col];
         var piececolor = "blank";
         if (piece != '1') {
             if (piece == piece.toUpperCase()) {
