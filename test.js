@@ -26,7 +26,7 @@ process.stdin.on('keypress', function(ch,key) {
                 game.reportStatus();
             break;
         default: 
-            //game.showBoard({perspective:'white'});
+                game.showBoard();
             break;
     }
 });
