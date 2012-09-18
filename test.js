@@ -7,21 +7,22 @@ game.setOpponent({name:'Jamal',color:'black'});
 game.setPlayer({name:'David',color:'white'});
 game.showOpponent();
 game.showPlayer();
+game.position(6,6);
 keypress(process.stdin);
 process.stdin.on('keypress', function(ch,key) {
     if (key !== undefined) {
         switch (key.name) {
             case 'left': 
-                    game.setBoundaries();
+                    game.setBoundaries('left');
                 break;
             case 'right': 
-                    game.setBoundaries();
+                    game.setBoundaries('right');
                 break;
             case 'up': 
-                    game.setBoundaries();
+                    game.setBoundaries('up');
                 break;
             case 'down': 
-                    game.setBoundaries();
+                    game.setBoundaries('down');
                 break;
             case 'space' :
                     game.select();
