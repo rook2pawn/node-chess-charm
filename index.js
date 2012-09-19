@@ -24,15 +24,18 @@ var chessCharm = function() {
     var opponent = {};
     var player = {};
     var perspective = "white";
-    var board = undefined;
+    var board = chess.startboard;
     var offset = 3;
     var selected = {};
     var self = {};
     self.isSelected = false;
+    self.setColors = function() { 
+        setColors();
+    };
     self.showBoard = function(params) {
         setColors(); 
         if (params === undefined) params = {};
-        board = params.board || chess.startboard;
+        board = params.board || board;
         perspective = params.perspective || perspective;
         var viewBoard = undefined;
         if (perspective === 'black') {
@@ -78,6 +81,7 @@ var chessCharm = function() {
                 charm.write(chess.pieces[piece]);
             }
         }
+        setColors();
         return self;
     };
     self.cycleColors = function() {
@@ -195,7 +199,7 @@ var chessCharm = function() {
             charm.position(x,y);
         });
     };
-    self.moveSelect = function() {
+    self.moveSelect = function(params) {
         setColors();
         charm.position(function(x,y) {
             self.showBoard({perspective:perspective});
@@ -212,12 +216,16 @@ var chessCharm = function() {
                 charm.write("Move to: " + letter.concat(number));
                 var movestring = selected.msanpos;
                 movestring = movestring.concat(letter.concat(number));
-                self.move(movestring);
+                if ((params.nomove === undefined) || (params.nomove === false)) {
+                    self.move(movestring);
+                }
+                charm.position(x,y);
+                params.cb(movestring,selected.color); // send the selected (start) piece color)
             } else {
                 selected = {};
                 charm.erase('end'); 
+                charm.position(x,y);
             }
-            charm.position(x,y);
         });
     };
     self.select = function(cb) {
@@ -234,6 +242,7 @@ var chessCharm = function() {
             var number = by + 1;
             charm.position(offset + 10 ,offset + 4);
             if ((color !== ' ') && (piece !== '1')) {
+                selected.color = color;
                 selected.piece = piece;
                 selected.pos = {row:by, col:bx};
                 selected.msanpos = letter.concat(number);
