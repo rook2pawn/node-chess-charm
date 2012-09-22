@@ -1,9 +1,9 @@
 var chessCharm = require('../index.js');
 var board = chessCharm();
 board.setOpponent({name:'jamal',color:'black'})
-    .setPlayer({name:'Johannes',color:'white'})
-    .showOpponent()
-    .showPlayer();
+board.setPlayer({name:'Johannes',color:'white'})
+board.showOpponent()
+board.showPlayer();
 board.showBoard();
 setTimeout(function() {
     board.move('e2e4');
