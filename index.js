@@ -1,4 +1,5 @@
 var chess = require('./lib/chess');
+var Hash = require('hashish');
 var bg = require('./lib/backgrounds')();
 var EE = require('events').EventEmitter;
 var getNewCoords = function(x,y,perspective,offset) {
@@ -95,7 +96,7 @@ var chessCharm = function() {
         return self;
     };
     self.setOpponent = function(opp) {
-        opponent = opp
+        Hash(opponent).update(opp);
         return self;
     };
     self.setPerspective = function(pers) {
@@ -108,12 +109,17 @@ var chessCharm = function() {
             charm.position(offset + 10, offset + 8);
         else 
             charm.position(offset + 10, offset - 1);
+        charm.erase('end');
         charm.write(opponent.name);
         if (opponent.color == 'black') {
             charm.write(' (B)');
         } else {
             charm.write(' (W)');
         }
+        if ((opponent.disconnected !== undefined) && (opponent.disconnected === true)) {
+            charm.write('-disconnected');
+        }
+        self.centerCursor();
         return self;
     };
     self.showPlayer = function() {
@@ -128,11 +134,20 @@ var chessCharm = function() {
         } else {
             charm.write(' (W)');
         }
+        self.centerCursor();
         return self;
     };
     self.setPlayer = function(you) {
-        player = you;
-        return self;
+        Hash(player).update(you);
+/*
+        if (player.color !== undefined) {
+            if (player.color == 'white') { 
+                opponent.color = 'black';
+            } else {
+                opponent.color = 'white';
+            }
+        }
+*/
     };
     self.getOpponent = function() {
         return opponent;
@@ -183,19 +198,8 @@ var chessCharm = function() {
             var pos = getNewCoords(x,y,perspective,offset);
             var bx = pos.x;
             var by = pos.y;
-/*
-            var id = self.identifySquare({col:bx,row:by});
-            charm.write("id:" + id);
-            var piece = chess.getPiece(board,{row:by, col:bx});
-            charm.write(" " + piece);
-*/
             charm.write("x:" + x + " y:" + y);
             charm.write("x:" + bx + " y:" + by);
-/*
-            var letter = String.fromCharCode(bx+97);
-            var number = by + 1;
-            charm.write("-> " + letter + "" + number);
-*/
             charm.position(x,y);
         });
     };
@@ -273,24 +277,13 @@ var chessCharm = function() {
     self.position = function(x,y) {
         charm.position(x,y);
     };
+    self.centerCursor = function(x,y) {
+        charm.position(offset + 4, offset+4);
+    };
     self.move = function(msanMove) {
         var obj = chess.updateBoardMSAN(board,msanMove);
         board = obj.board;
         self.showBoard();
-        if (obj.color == 'black') {
-/*
-            charm.position(12,2);
-            charm.foreground('green').background('black');
-            charm.write(msanMove);
-*/
-        }
-        if (obj.color == 'white') {
-/*
-            charm.position(12,7);
-            charm.foreground('green').background('black');
-            charm.write(msanMove);
-*/
-        }
         return self;
     };
     return self;
